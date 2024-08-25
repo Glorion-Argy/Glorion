@@ -3139,7 +3139,7 @@ var Automation = () => ({
       onInitializeAttribute
     });
     if (beforeFormat && !beforeFormat({ sheet: attributesSheet })) return;
-    Private.formatAttributesSheet({ sheet: attributesSheet, mobile });
+    Private.formatAttributesSheet({ mobile });
     if (onFormat && !onFormat({ sheet: attributesSheet })) return;
     const cache = Cache_.cacheAttributeData({
       cacheConfig,
