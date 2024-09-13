@@ -2936,7 +2936,7 @@ var Automation = () => ({
     Generic_.deleteSheet(sheetName);
     const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = Generic_.getSheet(sheetName, sourceID);
-    sheet
+    const newSheet = sheet
       .copyTo(spreadsheet)
       .setName(sheetName)
       .setTabColorObject(sheet.getTabColorObject())
@@ -2949,7 +2949,7 @@ var Automation = () => ({
           )?.getIndex?.() + 1
       : 1;
     spreadsheet.moveActiveSheet(sheetIndex || 1);
-    return sheet;
+    return newSheet;
   },
   generateMobileSheet: ({
     databaseID,
