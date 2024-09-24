@@ -1978,7 +1978,7 @@ const _automationPrivate = () => ({
     martialRanged = [],
     landVehicles = [],
     mechanicalVehicles = [],
-    waterVehicles = [],
+    waterborneVehicles = [],
     extraConfig = {},
     mobile = false
   }) => {
@@ -1992,7 +1992,7 @@ const _automationPrivate = () => ({
         'Martial': [...martialMelee, ...martialRanged],
         'Land Vehicles': landVehicles,
         'Mechanical Vehicles': mechanicalVehicles,
-        'Water Vehicles': waterVehicles,
+        'Waterborne Vehicles': waterborneVehicles,
         ...extraConfig
       },
       allowChoice: false
@@ -4190,7 +4190,7 @@ var Automation = () => ({
         ...weapons,
         { argument: 'landVehicles', listName: 'Land Vehicles' },
         { argument: 'mechanicalVehicles', listName: 'Mechanical Vehicles' },
-        { argument: 'waterVehicles', listName: 'Water Vehicles' }
+        { argument: 'waterborneVehicles', listName: 'Waterborne Vehicles' }
       ], keys: 'proficiencies' },
       { callback: Private.setupTools, lists: [
         { argument: 'artisanTools', listName: "Artisan's Tools" },
