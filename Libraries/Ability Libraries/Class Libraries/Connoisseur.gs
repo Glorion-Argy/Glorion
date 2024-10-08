@@ -1,37 +1,4 @@
 var Connoisseur = () => ({
-  // Commands
-  getAllButtonConfigs: ({ configCallbacks = [], customConfig = {} }) => {
-    const Generic_ = Generic();
-    return [
-      Buttons().getButtonConfig(),
-      Automation().getButtonConfig(),
-      ...configCallbacks.reduce((total, callback) => {
-        const result = Generic_.unwrap(callback);
-        if (!result) return total;
-        if (!result.getButtonConfig) return [...total, result];
-        return [...total, result.getButtonConfig()];
-      }, []),
-      Connoisseur().getButtonConfig(),
-      customConfig
-    ];
-  },
-  useCommand: ({
-    command,
-    type,
-    configCallbacks = [],
-    customConfig = {},
-    mobile = false
-  }) => {
-    if (!command) {
-      throw 'You need a command name first, to use an ability.';
-    }
-    Helper().useCommand(
-      command,
-      type,
-      Connoisseur().getAllButtonConfigs({ configCallbacks, customConfig }),
-      mobile
-    );
-  },
   // Static
   getChannelSafeSpells: () => [
     'Transfusion',
@@ -198,9 +165,10 @@ var Connoisseur = () => ({
           [command]: () => ({ trackHistory })
         })
       };
-      Connoisseur().useCommand({
+      Controller().useCommand({
         command,
         type: 'passives',
+        selectedClass: 'Connoisseur',
         customConfig,
         mobile
       });
@@ -644,12 +612,12 @@ var Connoisseur = () => ({
       })
     };
   },
-  getCacheConfig: (configCallbacks = []) => {
+  getCacheConfig: () => {
     const baseSpellConfig = [
       { version: 'Immediate' },
       { version: 'Channeled', deletions: ['spellLevel'] }
     ];
-    const classConfig = {
+    return {
       actions: {
         'Crimson Cone': baseSpellConfig,
         'Scarlet Sphere': baseSpellConfig,
@@ -670,6 +638,5 @@ var Connoisseur = () => ({
         'Bloodbath': [{ version: 'Channeled' }]
       }
     };
-    return Automation().getCacheConfig({ configCallbacks, classConfig });
   }
 });

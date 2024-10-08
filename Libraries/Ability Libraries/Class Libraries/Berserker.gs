@@ -1,37 +1,4 @@
 var Berserker = () => ({
-  // Commands
-  getAllButtonConfigs: ({ configCallbacks = [], customConfig = {} }) => {
-    const Generic_ = Generic();
-    return [
-      Buttons().getButtonConfig(),
-      Automation().getButtonConfig(),
-      ...configCallbacks.reduce((total, callback) => {
-        const result = Generic_.unwrap(callback);
-        if (!result) return total;
-        if (!result.getButtonConfig) return [...total, result];
-        return [...total, result.getButtonConfig()];
-      }, []),
-      Berserker().getButtonConfig(),
-      customConfig
-    ];
-  },
-  useCommand: ({
-    command,
-    type,
-    configCallbacks = [],
-    customConfig = {},
-    mobile = false
-  }) => {
-    if (!command) {
-      throw 'You need a command name first, to use an ability.';
-    }
-    Helper().useCommand(
-      command,
-      type,
-      Berserker().getAllButtonConfigs({ configCallbacks, customConfig }),
-      mobile
-    );
-  },
   // Static
   getPostures: () => ['Vicious Posture', 'Unbreakable Posture'],
   // Automation
@@ -494,10 +461,10 @@ var Berserker = () => ({
       })
     };
   },
-  getCacheConfig: (configCallbacks = []) => {
+  getCacheConfig: () => {
     const Berserker_ = Berserker();
     const name = Berserker_.cachePostureCell();
-    const classConfig = {
+    return {
       actions: {
         'Rupture': [
           { deletions: ['secondaryEffect'] },
@@ -508,6 +475,5 @@ var Berserker = () => ({
         return { ...total, [posture]: [{ name }] };
       }, {})
     };
-    return Automation().getCacheConfig({ configCallbacks, classConfig });
   }
 });

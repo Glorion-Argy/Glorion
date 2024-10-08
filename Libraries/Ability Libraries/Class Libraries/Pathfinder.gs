@@ -1,37 +1,4 @@
 var Pathfinder = () => ({
-  // Commands
-  getAllButtonConfigs: ({ configCallbacks = [], customConfig = {} }) => {
-    const Generic_ = Generic();
-    return [
-      Buttons().getButtonConfig(),
-      Automation().getButtonConfig(),
-      ...configCallbacks.reduce((total, callback) => {
-        const result = Generic_.unwrap(callback);
-        if (!result) return total;
-        if (!result.getButtonConfig) return [...total, result];
-        return [...total, result.getButtonConfig()];
-      }, []),
-      Pathfinder().getButtonConfig(),
-      customConfig
-    ];
-  },
-  useCommand: ({
-    command,
-    type,
-    configCallbacks = [],
-    customConfig = {},
-    mobile = false
-  }) => {
-    if (!command) {
-      throw 'You need a command name first, to use an ability.';
-    }
-    Helper().useCommand(
-      command,
-      type,
-      Pathfinder().getAllButtonConfigs({ configCallbacks, customConfig }),
-      mobile
-    );
-  },
   // Static
   getExcludedAttributes: () => ['Silent DC', 'Reveal', 'Aware', 'Range', 'Trap'],
   // Automation
@@ -411,7 +378,13 @@ var Pathfinder = () => ({
         })
       })
     };
-    Pathfinder().useCommand({ command: bonusTrap, type, customConfig, mobile });
+    Controller().useCommand({
+      command: bonusTrap,
+      type,
+      selectedClass: 'Pathfinder',
+      customConfig,
+      mobile
+    });
     return true;
   },
   onKillingBlow: () => {
@@ -724,12 +697,12 @@ var Pathfinder = () => ({
       })
     };
   },
-  getCacheConfig: (configCallbacks = []) => {
+  getCacheConfig: () => {
     const baseTrapConfig = [
       { deletions: ['hit', 'mainEffect', 'secondaryEffect'] },
       { version: 'Trigger', deletions: ['slotCost'] }
     ];
-    const classConfig = {
+    return {
       actions: {
         'Forager': [
           { deletions: ['mainEffect'] },
@@ -741,6 +714,5 @@ var Pathfinder = () => ({
         'Landmine': baseTrapConfig
       }
     };
-    return Automation().getCacheConfig({ configCallbacks, classConfig });
   }
 });

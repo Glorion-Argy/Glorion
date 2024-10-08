@@ -1,37 +1,4 @@
 var Alchemist = () => ({
-  // Commands
-  getAllButtonConfigs: ({ configCallbacks = [], customConfig = {} }) => {
-    const Generic_ = Generic();
-    return [
-      Buttons().getButtonConfig(),
-      Automation().getButtonConfig(),
-      ...configCallbacks.reduce((total, callback) => {
-        const result = Generic_.unwrap(callback);
-        if (!result) return total;
-        if (!result.getButtonConfig) return [...total, result];
-        return [...total, result.getButtonConfig()];
-      }, []),
-      Alchemist().getButtonConfig(),
-      customConfig
-    ];
-  },
-  useCommand: ({
-    command,
-    type,
-    configCallbacks = [],
-    customConfig = {},
-    mobile = false
-  }) => {
-    if (!command) {
-      throw 'You need a command name first, to use an ability.';
-    }
-    Helper().useCommand(
-      command,
-      type,
-      Alchemist().getAllButtonConfigs({ configCallbacks, customConfig }),
-      mobile
-    );
-  },
   // Static
   getHerbList: () => [
     'Bogtail',
@@ -1009,7 +976,13 @@ var Alchemist = () => ({
         })
       })
     };
-    Alchemist().useCommand({ command: spellName, type, customConfig, mobile });
+    Controller().useCommand({
+      command: spellName,
+      type,
+      selectedClass: 'Alchemist',
+      customConfig,
+      mobile
+    });
     return true;
   },
   reduceOvergrowthRecharge: ({ trackHistory }, amount = 1) => trackHistory({
@@ -1627,7 +1600,7 @@ var Alchemist = () => ({
       })
     };
   },
-  getCacheConfig: (configCallbacks = []) => {
+  getCacheConfig: () => {
     const onlyMainEffectSpell = ({ version = 'Tick', includeHit = false } = {}) => [
       { deletions: [...(includeHit ? ['hit'] : []), 'mainEffect'] },
       { version, deletions: ['reagents'] }
@@ -1639,7 +1612,7 @@ var Alchemist = () => ({
         deletions: ['reagents', ...(includeHit ? ['hit'] : []), 'mainEffect']
       }
     ];
-    const classConfig = {
+    return {
       actions: {
         'Thornwood Cask': onlyMainEffectSpell(),
         'Mixture of Involuntary Assistance': bothEffectsSpell({ includeHit: true }),
@@ -1654,6 +1627,5 @@ var Alchemist = () => ({
         'Create Draught': onlyMainEffectSpell({ version: 'Drink' })
       }
     };
-    return Automation().getCacheConfig({ configCallbacks, classConfig });
   }
 });

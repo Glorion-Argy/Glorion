@@ -1,37 +1,4 @@
 var Nomad = () => ({
-  // Commands
-  getAllButtonConfigs: ({ configCallbacks = [], customConfig = {} }) => {
-    const Generic_ = Generic();
-    return [
-      Buttons().getButtonConfig(),
-      Automation().getButtonConfig(),
-      ...configCallbacks.reduce((total, callback) => {
-        const result = Generic_.unwrap(callback);
-        if (!result) return total;
-        if (!result.getButtonConfig) return [...total, result];
-        return [...total, result.getButtonConfig()];
-      }, []),
-      Nomad().getButtonConfig(),
-      customConfig
-    ];
-  },
-  useCommand: ({
-    command,
-    type,
-    configCallbacks = [],
-    customConfig = {},
-    mobile = false
-  }) => {
-    if (!command) {
-      throw 'You need a command name first, to use an ability.';
-    }
-    Helper().useCommand(
-      command,
-      type,
-      Nomad().getAllButtonConfigs({ configCallbacks, customConfig }),
-      mobile
-    );
-  },
   // Static
   getMeleeAttacks: () => [
     'Main-hand',
@@ -901,7 +868,7 @@ var Nomad = () => ({
       })
     };
   },
-  getCacheConfig: (configCallbacks = []) => {
+  getCacheConfig: () => {
     const onKillConfig = [
       {},
       {
@@ -909,7 +876,7 @@ var Nomad = () => ({
         deletions: ['currentSlots', 'maxSlots', 'refresh', 'hit']
       }
     ];
-    const classConfig = {
+    return {
       actions: {
         'Wicked Form': [{ rename: 'Form' }],
         'Celestial Form': [{ rename: 'Form' }],
@@ -931,6 +898,5 @@ var Nomad = () => ({
         'Angelic Beam': [{ rename: 'Beam' }]
       }
     };
-    return Automation().getCacheConfig({ configCallbacks, classConfig });
   }
 });

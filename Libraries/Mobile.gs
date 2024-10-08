@@ -60,22 +60,34 @@ const _mobilePrivate = () => ({
 });
 
 var Mobile = () => ({
-  useAppropriateDefaultCommand: (
+  useCommand: ({
     command,
     range,
-    getAllButtonConfigsCallback,
-    spellNameConfig,
+    sheet,
+    sheetName,
+    selectedClass,
+    buttonConfigsCallback,
     createCharacterCallback,
     resetCallback
-  ) => {
-    const Private = _mobilePrivate();
-    const sheet = range.getSheet();
-    const sheetName = sheet.getName();
+  }) => {
     try {
       if (sheetName === 'Mobile') {
-        Private.mobileCommand(command, range, sheet, getAllButtonConfigsCallback, spellNameConfig);
-      } else if (sheetName === 'Character Creation') {
-        Private.characterCreationCommand(command, range, sheet, createCharacterCallback, resetCallback);
+        return _mobilePrivate().mobileCommand(
+          command,
+          range,
+          sheet,
+          buttonConfigsCallback,
+          this[selectedClass]?.()?.getSpellNameConfig?.()
+        );
+      } 
+      if (sheetName === 'Character Creation') {
+        return _mobilePrivate().characterCreationCommand(
+          command,
+          range,
+          sheet,
+          createCharacterCallback,
+          resetCallback
+        );
       }
     } catch (error) {
       IO().notify({

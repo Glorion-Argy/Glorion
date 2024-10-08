@@ -1,37 +1,4 @@
 var Architect = () => ({
-  // Commands
-  getAllButtonConfigs: ({ configCallbacks = [], customConfig = {} }) => {
-    const Generic_ = Generic();
-    return [
-      Buttons().getButtonConfig(),
-      Automation().getButtonConfig(),
-      ...configCallbacks.reduce((total, callback) => {
-        const result = Generic_.unwrap(callback);
-        if (!result) return total;
-        if (!result.getButtonConfig) return [...total, result];
-        return [...total, result.getButtonConfig()];
-      }, []),
-      Architect().getButtonConfig(),
-      customConfig
-    ];
-  },
-  useCommand: ({
-    command,
-    type,
-    configCallbacks = [],
-    customConfig = {},
-    mobile = false
-  }) => {
-    if (!command) {
-      throw 'You need a command name first, to use an ability.';
-    }
-    Helper().useCommand(
-      command,
-      type,
-      Architect().getAllButtonConfigs({ configCallbacks, customConfig }),
-      mobile
-    );
-  },
   // Static
   getWeapons: () => ['Glaive Saber', 'Phase Blade', 'Scepter'],
   getSummonsWithActionablePassives: () => [
@@ -1702,8 +1669,7 @@ var Architect = () => ({
   },
   chainCast: ({ spellName, slot, memory, mobile, trackHistory }) => {
     if ((memory.stopChaining === spellName)) return true;
-    const Architect_ = Architect();
-    const selectedSpell = Architect_.selectAvailableSlotSpell({ spellName, slot, mobile });
+    const selectedSpell = Architect().selectAvailableSlotSpell({ spellName, slot, mobile });
     if (!selectedSpell) return;
     if (selectedSpell === true) return true;
 
@@ -1718,7 +1684,13 @@ var Architect = () => ({
         })
       })
     };
-    Architect_.useCommand({ command, type, customConfig, mobile });
+    Controller().useCommand({
+      command,
+      type,
+      selectedClass: 'Architect',
+      customConfig,
+      mobile
+    });
     return true;
   },
   checkForArcaneResurgence: ({ spellName, sheet, mobile, trackHistory }) => {
@@ -1769,8 +1741,7 @@ var Architect = () => ({
     };
   },
   checkForEcho: ({ spellName, sheet, memory, mobile, trackHistory }) => {
-    const Architect_ = Architect();
-    const activeEchoes = Architect_.getActiveSummons()
+    const activeEchoes = Architect().getActiveSummons()
       .filter((summon) => summon.includes('Echo'))
       .length;
     if (!activeEchoes) return true;
@@ -1820,7 +1791,13 @@ var Architect = () => ({
           })
         })
       }
-      Architect_.useCommand({ command: spellName, type, customConfig, mobile });
+      Controller().useCommand({
+        command: spellName,
+        type,
+        selectedClass: 'Architect',
+        customConfig,
+        mobile
+      });
     }
     delete memory.stopChaining;
     return { memory };
@@ -2539,7 +2516,13 @@ var Architect = () => ({
               })
             })
           };
-          Architect_.useCommand({ command, type: 'actions', customConfig, mobile });
+          Controller().useCommand({
+            command,
+            type: 'actions',
+            selectedClass: 'Architect',
+            customConfig,
+            mobile
+          });
         });
         return true;
       },
@@ -2941,12 +2924,12 @@ var Architect = () => ({
       })
     };
   },
-  getCacheConfig: (configCallbacks = []) => {
+  getCacheConfig: () => {
     const tickConfig = [
       { deletions: ['hit', 'mainEffect', 'secondaryEffect'] },
       { version: 'Tick', deletions: ['slotCost', 'slotType', 'requires'] }
     ];
-    const classConfig = {
+    return {
       actions: {
         'Mindmeld Dome': tickConfig,
         'Warpblade': tickConfig
@@ -2961,6 +2944,5 @@ var Architect = () => ({
         ]
       }
     };
-    return Automation().getCacheConfig({ configCallbacks, classConfig });
   }
 });
