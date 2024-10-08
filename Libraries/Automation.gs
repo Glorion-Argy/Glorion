@@ -4092,7 +4092,7 @@ var Automation = () => ({
       });
     }
 
-    const characterSetupCell = `B${characterSetupRow}`;
+    const characterSetupCell = `C${characterSetupRow}`;
     let setupResult = JSON.parse(
       Generic_.getValue(characterSetupCell, characterCreationSheet) || '{}'
     );
@@ -4311,14 +4311,14 @@ var Automation = () => ({
       .getValues()
       .findIndex(([key]) => key === 'Character_Setup') + 1;
     if (characterSetupRow) {
-      Generic_.setValue(`B${characterSetupRow}`, '', characterCreationSheet);
+      Generic_.setValue(`C${characterSetupRow}`, '', characterCreationSheet);
     }
     const cacheRow = characterCreationSheet
       .getDataRange()
       .getValues()
       .findIndex(([key]) => key === 'Cache') + 1;
     if (cacheRow) {
-      Generic_.setValue(`B${cacheRow}`, '', characterCreationSheet);
+      Generic_.setValue(`C${cacheRow}`, '', characterCreationSheet);
     }
     Generic_.removeAllNamedRanges();
     const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();

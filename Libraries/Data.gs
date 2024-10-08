@@ -11,21 +11,27 @@ var Data = () => ({
       const grid = sheetObject.getDataRange().getValues();
       for (let row = 0; row < grid.length; row++) {
         for (let column = 0; column < grid[row].length; column++) {
-          if (grid[row][column] === key) return grid[row + rowOffset][column + columnOffset];
+          if (grid[row][column] === key) {
+            return grid[row + rowOffset][column + columnOffset];
+          }
         }
       }
     }
   },
   databaseID: () => Data().variable([
     { key: 'Database_ID', sheet: 'Variables' },
-    { key: 'ID', sheet: 'Character Creation' }
+    { key: 'ID', sheet: 'Character Creation', columnOffset: 2 }
   ]),
   itemsKey: () => Data().variable([
     { key: 'Items_Key', sheet: 'Variables' },
-    { key: 'Items key', sheet: 'Character Creation' }
+    { key: 'Items key', sheet: 'Character Creation', columnOffset: 2 }
   ]),
   characterSetup: (prioritizeVariables = true) => {
-    const characterCreationConfig = { key: 'Character_Setup', sheet: 'Character Creation' };
+    const characterCreationConfig = {
+      key: 'Character_Setup',
+      sheet: 'Character Creation',
+      columnOffset: 2
+    };
     const variablesConfig = { key: 'Character_Setup', sheet: 'Variables' };
     return JSON.parse(
       Data().variable(

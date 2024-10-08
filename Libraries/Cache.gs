@@ -55,18 +55,20 @@ var Cache = () => ({
           .find(([variable]) => variable === variableName)?.[1] || '{}';
       } else variablesValue = '{}';
     }
+
     let cacheValue = '{}';
     const characterCreationSheet = Generic_.getSheet('Character Creation');
     if (characterCreationSheet) {
       cacheValue = characterCreationSheet
         .getDataRange()
         .getValues()
-        .find(([variable]) => variable === variableName)?.[1] || '{}';
+        .find(([variable]) => variable === variableName)?.[2] || '{}';
     }
     const entireCache = {
       ...JSON.parse(variablesValue || '{}'),
       ...JSON.parse(cacheValue)
     };
+
     if (!sheet) {
       return Object.keys(entireCache).length
         ? entireCache
@@ -93,7 +95,7 @@ var Cache = () => ({
         .getDataRange()
         .getValues()
         .findIndex(([variable]) => variable === variableName) + 1;
-      if (cacheRow) cacheCell = `B${cacheRow}`;
+      if (cacheRow) cacheCell = `C${cacheRow}`;
     }
 
     const cacheToBeSaved = sheetName
