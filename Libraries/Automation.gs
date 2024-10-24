@@ -3789,6 +3789,7 @@ var Automation = () => ({
 
     const Convert_ = Convert();
     const grid = characterSheet.getDataRange().getValues();
+    const formulas = characterSheet.getDataRange().getFormulas();
     const characterData = {
       ['Class']: selectedClass,
       ['Race']: race,
@@ -3799,7 +3800,7 @@ var Automation = () => ({
     for (let row = 0; row < grid.length; row++) {
       for (let column = 0; column < grid[row].length; column++) {
         const value = grid[row][column];
-        if (!value) continue;
+        if (!value || formulas[row + 1]?.[column]) continue;
         const mergedRange = Generic_.getMergedCells([row + 1, column + 1], characterSheet);
         const rightmostCell = mergedRange
           ? Object.values(Convert_.toRowColumnNotation(mergedRange.split(':')[1]))
