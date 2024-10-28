@@ -1,59 +1,48 @@
-# Glorion: TTRPG Apps Script for Google Sheets
-
-Welcome to **Glorion**, a versatile Apps Script project designed to enhance your Tabletop Role-Playing Game (TTRPG) experience using Google Sheets. Glorion provides both Dungeon Masters (DMs) and players with powerful tools for customization and interaction, with the goal of supporting various TTRPG systems. As of right now, the tool supports D&D 5e.
+# Welcome to Glorion
+A versatile Apps Script project designed to enhance your Tabletop Role-Playing Game (TTRPG) experience using Google Sheets. Glorion provides both Dungeon Masters (DMs) and players with powerful tools for customization and interaction, with the goal of supporting various TTRPG systems. As of right now, the tool supports **D&D 5e**.
 
 ## Overview
-
-Glorion allows for extensive customization and interaction within your TTRPG campaigns through two primary Google Sheets:
-
-1. **Database Sheet**: Managed by the DM, this sheet serves as the central repository for all campaign data, including custom classes, races, backgrounds, abilities, items etc. It’s the source of truth for the campaign, with all linked Character Sheets drawing from this database.
-
-2. **Character Sheet**: Used by players to generate and manage their characters. This sheet allows players to issue commands, perform dice rolls, undo actions, and level up their characters, all while drawing from the DM's Database.
+Glorion supports extensive customization and interaction in your TTRPG campaigns through two primary Google Sheets documents:
+- **Database Spreadsheet**: Managed by the DM, this spreadsheet stores all campaign data, including custom classes, races, backgrounds, abilities, items, and more. It's the primary data source for the campaign, with each **Character Spreadsheet** linked to it. One Database can serve multiple campaigns, with options to differentiate between them.
+- **Character Spreadsheet**: Used by players to generate and manage their characters. It allows players to issue commands, perform dice rolls, undo actions, level up, and more, while drawing from the DM's Database.
 
 ## Key Features
+### Mobile Functionality
+- **Mobile-Friendly Design**: Glorion is fully optimized for mobile use within the Google Sheets app, allowing players and DMs to manage campaigns and characters easily from their phones or tablets.
 
-### 1. **Mobile Functionality**
-- **Responsive Design**: Glorion is optimized for use on mobile devices via the Google Sheets app, allowing players and DMs to manage their campaigns and characters on the go.
-
-### 2. **Flexible Customization Options**
-- **Database Sheet Customization**: Easily create and modify custom game elements by filling in the cells of your Database Sheet. This includes adding new rows and columns or updating existing entries. Make adjustments to your campaign content without needing to write any code. Just use the provided sheet structure.
-
+### Flexible Customization Options
+- **Database Sheet Customization**: Customize your Database Sheet to add new game elements (classes, races etc.). No coding required, just fill in the cells as per the provided sheet structure to make changes to your campaign content.
 - **Advanced Argument Customization**: For more detailed customization, use up to 50 arguments to refine abilities. Examples include `healing: true` or `attacks: 3`. These adjustments are made through the Apps Script editor (Extensions > Apps Script) but still require no coding skills. Detailed documentation for these customization options will be provided in the future.
-
-- **Hooks and Custom Code**: For ultimate flexibility, Glorion supports 12 hooks and a `hookMemory` argument to embed custom code snippets throughout the ability process. While this requires some coding knowledge, example snippets will be available for ease of use. Comprehensive guides and examples will be provided to help with implementing custom code.
+- **Hooks and Custom Code**: For ultimate flexibility, Glorion supports 12 hooks and a `hookMemory` argument to embed custom code snippets throughout the ability process. While this requires some coding knowledge, example snippets will be available for ease of use. Comprehensive guides and examples will be provided to help with implementing custom code in a future update.
 
 ## Installation
+1. **Requirements**: You'll need a **Google Drive** account, so make sure you have a **Gmail**.
+2. **Copy the Spreadsheets**: Each DM should copy one **Database Spreadsheet**, and each player should copy one **Character Spreadsheet**:
+    - **Database Spreadsheet**: https://tinyurl.com/glorion-database-copy
+    - **Character Spreadsheet**: https://tinyurl.com/glorion-copy
+3. Grant **View Access** to the **Database Spreadsheet**:
+    - While inside the Database, select **File** at the top, hover over **Share** and then click on **Share with others** from the sub-menu. Under **General Access**, change the default **Restricted** setting to **Anyone with the link** (which grants **View Access**). Click **Copy Link** and share this link with your players.
+4. **Setup for Character Spreadsheets**: Each **Character Spreadsheet** requires a few setup steps with information provided by the DM:
+    - **Database ID**: Extract the **Database ID** from the Database link provided by your DM. For example, in `https://docs.google.com/spreadsheets/d/1NiCEk_88ws2IHuwH7PiyiUKIeDzaw0LcaGzo0F4Z8XI/edit?gid=0#gid=0`, the ID is the part between `/d/` and `/edit`, in this case `1NiCEk_88ws2IHuwH7PiyiUKIeDzaw0LcaGzo0F4Z8XI`. By default, **Character Spreadsheets** point to the original Database, which remains functional, but cannot be edited.
+    - **Items Key**: This key is the name of the sheet within the Database that contains the item list for the campaign. By default, it’s named **The Vault**, a starter list of items provided by Glorion, ready to be edited to the liking of any DM. My suggestion is that a DM should have a unique and customized item list for each of their campaigns, which by default should be copies of **The Vault** sheet with surgical modifications, each with their own name (**Items key**), e.g., "*Wonderworks*", or "*Equinox*".
 
-1. **Clone or Copy the Google Sheets:**
-   - **Database Sheet**: [Link to Database Sheet Template]
-   - **Character Sheet**: [Link to Character Sheet Template]
-
-2. **Set Up the Sheets:**
-   - Copy the templates to your Google Drive.
-   - Follow the setup instructions provided in the sheets to link them appropriately.
-
-3. **Customization:**
-   - Use the Database Sheet to set up your campaign elements.
-   - Customize your Character Sheets as needed, following the guidance provided in the sheets.
-
-## Future Plans
-
-- **Designs and Templates**: Share designs for custom classes, races, backgrounds, abilities, items etc., along with installation guides and links.
-- **Expansion**: While the tool currently supports D&D 5e, the aim is to expand compatibility to other TTRPG systems.
-- **Ongoing Maintenance**: Regular updates and new features will be added to enhance functionality and user experience.
-
-## Contribution
-
-- **Open Source**: Glorion is free to use and open source. Contributions and suggestions are welcome. Please refer to our [Contributing Guidelines] for more details.
+## Roadmap and Future Plans
+- **Ongoing Maintenance**: Glorion will be continuously maintained, with new features added to enrich functionality and user experience.
+- **Community Contributions**: Expect an expanding library of classes, races, backgrounds, and other assets, some of them being Glorion Homebrew, while others being user-generated content. Certain community contributions will be featured after the blessing of their creator, along with full credits to them.
+- **Documentation**: The entirety of the Glorion library, as well as the Google Sheet named (custom) functions will be documented thoroughly.
+- **Professional Artwork**: All AI-generated artwork will be replaced by human-made art as funding allows.
+- **Website and Dedicated Server**: Plans include developing a dedicated server and standalone website for Glorion, providing a project hub beyond Discord.
+- **Multi-System Compatibility**: Although currently only supporting D&D 5e, Glorion is designed to expand compatibility with other TTRPG systems.
+- **Original System Development**: With ongoing community support, the ultimate vision is for Glorion to evolve into its own TTRPG system, drawing inspiration from user feedback and other systems.
+- **Standalone App**: With sufficient funding, Glorion may transition into a standalone app, broadening its potential beyond Google Sheets.
 
 ## About the Project
-
-Glorion is named after the world I’ve been building for over a decade. The tool reflects my design and world-building efforts, providing an example and inspiration for users to create their own content. Future updates will include more details about my world and design philosophy.
+Glorion is named after the world I’ve been building for over a decade, embodying years of personal design and world-building efforts. As Glorion grows, I’ll share more insights into this world and the philosophy behind its design to inspire users to create their own unique content.
 
 ## Contact
-
-For questions, feedback, or support, please reach out to [Your Email Address].
+For questions, feedback, or support, please join our Discord community
+https://tinyurl.com/glorion-discord
 
 ---
 
-Happy gaming, and may your adventures in Glorion be epic!
+Happy adventuring, and may Glorion be a companion in all your epic quests!
