@@ -25,44 +25,6 @@ var Nomad = () => ({
       'Beam Off-hand': `${Nomad_.getBeamName()} Off-hand`
     };
   },
-  getAttributeMetadataConfig: () => ({ 'Temp': ['Extra Temp'] }),
-  onInitializeAttribute: ({ sheet, value, row, column, existingAttributeData }) => {
-    if (value) return;
-    const Generic_ = Generic();
-    const extraTemp = existingAttributeData['Extra Temp'];
-    if (extraTemp !== undefined && Generic_.getValue([row + 1, column], sheet) === 'Temp') {
-      Generic_.setValue([row + 2, column + 1], extraTemp, sheet);
-    }
-    return true;
-  },
-  onAttributesFormat: ({ sheet }) => {
-    if (!sheet) return;
-    const grid = sheet.getDataRange().getValues();
-    let range = {};
-    for (let row = 0; row < grid.length; row++) {
-      for (let column = 0; column < grid[row].length; column++) {
-        if (grid[row][column] === 'Temp') {
-          range = { row: row + 2, column: column + 1 };
-        }
-      }
-    }
-    const { row, column } = range;
-    sheet.getRange(row, column, 1, 2).breakApart();
-    sheet
-      .getRange(row, column + 1)
-      .setValue(0)
-      .setBorder(
-        null,
-        true,
-        null,
-        null,
-        null,
-        null,
-        '#000000',
-        SpreadsheetApp.BorderStyle.DASHED
-      );
-    return true;
-  },
   onActionSheetFormat: ({
     sheet,
     grid,
@@ -180,8 +142,8 @@ var Nomad = () => ({
   resetFormDuration: ({ trackHistory }) => {
     const Generic_ = Generic();
     trackHistory([
+      { ...Generic_.getNamedRange('Temp'), value: 0 },
       { ...Generic_.getNamedRange('Form_Duration'), value: 0 },
-      { ...Generic_.getNamedRange('Extra_Temp'), value: 0 },
       ...Nomad().getStolenAttributes().map((attributeData) => ({ ...attributeData, value: 0 }))
     ]);
     return Helper().resetTracker({
@@ -362,8 +324,6 @@ var Nomad = () => ({
     const Helper_ = Helper(), Nomad_ = Nomad();
     return Helper_.abstractUseAbility({
       outputName: Nomad_.getFormName(),
-      temporaryMainEffectModifier: 1,
-      temporaryAttributeOverwrite: 'Extra_Temp',
       mainEffectOutput: 'Temporary Hit Points gained',
       onUse: ({ sheet, trackHistory }) => {
         Nomad_.startFormDuration({
@@ -373,6 +333,11 @@ var Nomad = () => ({
         });
         return Helper_.setTracker({ spellName: 'Form', sheet, trackHistory });
       },
+      onSuccess: ({ result, trackHistory }) => trackHistory({
+        ...Generic().getNamedRange('Temp'),
+        value: result,
+        relative: true
+      }),
       options
     });
   },
@@ -486,8 +451,6 @@ var Nomad = () => ({
     options
   }),
   abstractBolsteringBlow: (options = {}) => Helper().abstractUseAbility({
-    temporaryMainEffectModifier: 0.5,
-    temporaryAttributeOverwrite: 'Extra_Temp',
     onCheck: [
       Nomad().checkForFormAbility,
       ({ spellName, mobile }) => {
@@ -500,6 +463,11 @@ var Nomad = () => ({
         });
       }
     ],
+    onSuccess: ({ result, trackHistory }) => trackHistory({
+      ...Generic().getNamedRange('Temp'),
+      value: Math.floor(result / 2),
+      relative: true
+    }),
     options
   }),
   abstractBeam: (options = {}) => {
@@ -677,10 +645,15 @@ var Nomad = () => ({
         });
       }
       if (Generic_.doesValueExist('Frenzied Riposte', 'Passives')) {
+        const isFormActive = Helper().getTracker('Form', 'Actions');
+        const temporaryHealthState = Generic_.getNamedRange('Temp');
+        const { value: frenziedRiposteValue } = Generic_.getNamedRange('Frenzied_Riposte');
         changes.push({
-          ...Generic_.getNamedRange('Extra_Temp'),
-          value: Generic_.getNamedRange('Frenzied_Riposte').value,
-          relative: true
+          ...temporaryHealthState,
+          value: isFormActive
+            ? frenziedRiposteValue
+            : Math.max(frenziedRiposteValue, temporaryHealthState.value),
+          relative: isFormActive
         });
       }
       if (!changes.length) return true;
@@ -736,9 +709,6 @@ var Nomad = () => ({
                 sheet: 'Bonus Actions',
                 trackHistory
               });
-            }
-            if (!Helper_.getTracker('Form', 'Actions')) {
-              trackHistory({ ...Generic_.getNamedRange('Extra_Temp'), value: 0 });
             }
             Nomad_.reduceFormDuration({ trackHistory });
             return Nomad_.resetDefensiveRiposteStacks({ trackHistory });
@@ -856,14 +826,8 @@ var Nomad = () => ({
       }),
       automation: () => ({
         'Update Mobile Sheet': () => ({ spellNameConfig: Nomad_.getSpellNameConfig() }),
-        'Update Attributes Sheet': () => ({
-          onInitializeAttribute: Nomad_.onInitializeAttribute,
-          onFormat: Nomad_.onAttributesFormat,
-          cacheArguments: { attributeMetadataConfig: Nomad_.getAttributeMetadataConfig() }
-        }),
         'Update Actions Sheet': () => ({ onFormat: Nomad_.onActionSheetFormat }),
         'Update Bonus Actions Sheet': () => ({ onFormat: Nomad_.onActionSheetFormat }),
-        'Generate Cache': () => ({ attributeMetadataConfig: Nomad_.getAttributeMetadataConfig() }),
         'Level Up': () => ({ onLevelUp: Nomad_.onLevelUp })
       })
     };

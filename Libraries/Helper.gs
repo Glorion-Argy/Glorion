@@ -1029,14 +1029,19 @@ var Helper = () => ({
     amount = 0,
     roundDown = true,
     attributeOverwrite = 'Temp',
+    relative = false,
     trackHistory,
     changes = []
   } = {}) => {
     if (amount <= 0) return changes;
+    const temporaryHealthState = Generic().getNamedRange(attributeOverwrite);
+    const roundedAmount = roundDown ? -Math.round(-amount) : Math.round(amount);
     const newChange = {
-      ...Generic().getNamedRange(attributeOverwrite),
-      value: roundDown ? -Math.round(-amount) : Math.round(amount),
-      relative: true
+      ...temporaryHealthState,
+      value: relative
+        ? roundedAmount
+        : Math.max(roundedAmount, temporaryHealthState.value),
+      relative
     };
     return trackHistory
       ? trackHistory(newChange)
