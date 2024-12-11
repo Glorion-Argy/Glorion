@@ -41,7 +41,8 @@ Glorion is named after the world I’ve been building for over a decade, embodyi
 
 ## Contact
 For questions, feedback, or support, please join our Discord community
-https://tinyurl.com/glorion-discord
+
+https://discord.gg/pJxyrAESQw
 
 ---
 
