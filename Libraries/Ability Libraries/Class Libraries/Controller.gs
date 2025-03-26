@@ -43,7 +43,7 @@ var Controller = () => ({
     const selectedClass = Data().selectedClass();
     const buttonConfigsCallback = () => Controller().getAllButtonConfigs({
       selectedClass,
-      customConfigCallback
+      customConfig: customConfigCallback
     });
     Mobile().useCommand({
       command,
