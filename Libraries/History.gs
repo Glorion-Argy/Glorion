@@ -349,7 +349,7 @@ var History = () => ({
         return changeSheet === sheet && changeRange === range;
       });
       if (existingChange) {
-        existingChange.newValue = calculateNewValue(existingChange.newValue);
+        existingChange.newValue = calculateNewValue(Generic_.unwrap(existingChange.newValue));
       } else {
         const currentValue = isFormula
           ? Generic_.getFormula(range, sheet)
